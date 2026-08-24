@@ -1,7 +1,19 @@
-from sqlalchemy import create_engine # type: ignore
-from sqlalchemy.orm import declarative_base, sessionmaker 
+import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
 
-DATABASE_URL = "postgresql+psycopg2://postgres:samruddhi@localhost:5432/ai_career_copilot"
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL environment variable is not set")
+
+# Fix postgres:// URLs if needed
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace(
+        "postgres://",
+        "postgresql://",
+        1
+    )
 
 engine = create_engine(DATABASE_URL)
 
